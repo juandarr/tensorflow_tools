@@ -2,20 +2,25 @@ import os
 import glob
 import pandas as pd
 import json
+from PIL import Image 
 
 '''
 Path is defined as an argument here
 '''
-def json_to_csv():
+def json_to_csv(path):
     json_list = []
-    for json_file in glob.glob('*.json'):
+    for json_file in glob.glob(path + '/*.json'):
         with open(json_file, 'r') as f:
             datastore = json.load(f)
-        
+            print('Here is the Json file: ', json_file)
+            filename = json_file.split('/')[-1].split('.')[0]
+            print('And this is the filename: ', filename)
+            im = Image.open(filename+'.jpg')
+            width, height = im.size
             for data in datastore:
-                value = ('filename',
-                        data['pos']['w'],
-                        data['pos']['h'],
+                value = (filename,
+                        width,
+                        height,
                         data['name'],
                         data['pos']['x'],
                         data['pos']['y'],
@@ -29,8 +34,8 @@ def json_to_csv():
 
 def main():
     image_path = os.path.join(os.getcwd(), 'annotations')
-    xml_df = json_to_csv()
+    xml_df = json_to_csv(image_path)
     xml_df.to_csv('raccoon_labels.csv', index=None)
-    print('Successfully converted xml to csv.')
+    print('Successfully converted json to csv.')
 
 main()
