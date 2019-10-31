@@ -15,7 +15,8 @@ def json_to_csv(path):
             print('Here is the Json file: ', json_file)
             filename = json_file.split('/')[-1].split('.')[0]
             print('And this is the filename: ', filename)
-            im = Image.open(filename+'.jpg')
+            filename += '.jpg'
+            im = Image.open(filename)
             width, height = im.size
             for data in datastore:
                 value = (filename,
